@@ -3,7 +3,7 @@ import copy
 
 def queue_time(customers_list: list, num_of_tills: int):
     stack = copy.copy(customers_list)
-    tills = [stack.pop(0) for c in range(num_of_tills)]
+    tills = [stack.pop(0) for _ in range(num_of_tills)]
     counter = 0
     while stack:
         min_time = min(tills)
@@ -14,4 +14,7 @@ def queue_time(customers_list: list, num_of_tills: int):
     return counter + max(tills)
 
 
-print(queue_time([2, 3, 10], 3))
+if __name__ == '__main__':
+    initial_queue = [2, 3, 10]
+    num_of_tills = 3
+    print(queue_time(initial_queue, num_of_tills))

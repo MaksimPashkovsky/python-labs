@@ -61,4 +61,7 @@ def lev(s: str, t: str, *,
     return matrix[len(s)][len(t)]
 
 
-print(lev("sitting", "kitten", print_matrix=1, print_detailed_result=1))
+if __name__ == '__main__':
+    word1 = "sitting"
+    word2 = "kitten"
+    print(lev(word1, word2, print_matrix=1, print_detailed_result=1, tab_size=4))

@@ -2,7 +2,7 @@ import random
 
 
 def monte_carlo_pi(num_of_points: int):
-    i, points_inside = 0, 0
+    points_inside = 0
     for i in range(num_of_points):
         x, y = random.random(), random.random()
         if x * x + y * y <= 1:
