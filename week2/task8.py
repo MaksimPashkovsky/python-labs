@@ -1,4 +1,4 @@
-def knapsack(total_weight, items, limit):
+def knapsack(total_weight: int, items: list, limit: int) -> list:
     K = [[0 for x in range(total_weight + 1)] for x in range(len(items) + 1)]
 
     for i in range(len(items) + 1):
@@ -34,3 +34,10 @@ if __name__ == '__main__':
         print(f"Item: weight = {w}, cost = {c}")
     total_weight, total_sum = sum(list(zip(*res))[0]), sum(list(zip(*res))[1])
     print(f"Total weight = {total_weight}, total sum = {total_sum}")
+    # tests
+    assert sum([t[1] for t in knapsack(50, [(10, 60), (20, 100), (30, 120)], 1000)]) == 220
+    assert sum([t[1] for t in knapsack(50, [(10, 60), (20, 100), (30, 120)], 100)]) == 100
+    assert sum([t[1] for t in knapsack(6, [(4, 5), (3, 4), (2, 3), (1, 2)], 100)]) == 9
+    assert sum([t[1] for t in knapsack(50, [(10, 100), (20, 150), (15, 200), (10, 110)], 1000)]) == 460
+    assert sum([t[1] for t in knapsack(40, [(10, 100), (20, 150), (15, 200), (10, 110)], 400)]) == 350
+    print("All tests passed")

@@ -3,7 +3,7 @@ from task1 import Node
 
 class Graph:
     @staticmethod
-    def create_from_nodes(nodes):
+    def create_from_nodes(nodes: list):
         return Graph(nodes)
 
     def __init__(self, nodes = None):
@@ -84,14 +84,35 @@ if __name__ == "__main__":
     c = Node("C")
     d = Node("D")
     e = Node("E")
+    f = Node("F")
 
-    graph = Graph.create_from_nodes([a, b, c, d, e])
+    graph = Graph.create_from_nodes([a, b, c, d, e, f])
 
-    graph.connect(a, b, 4)
-    graph.connect(a, c, 3)
-    graph.connect(a, d, 2)
-    graph.connect(b, c, 1)
-    graph.connect(c, e, 7)
-    graph.connect(d, e, 2)
+    graph.connect(a, b, 14)
+    graph.connect(a, c, 9)
+    graph.connect(a, f, 7)
+    graph.connect(b, d, 9)
+    graph.connect(b, c, 2)
+    graph.connect(c, e, 11)
+    graph.connect(c, f, 10)
+    graph.connect(d, e, 6)
+    graph.connect(e, f, 15)
 
-    print(graph.distance(a))
+    from_a = graph.distance(a)
+    from_d = graph.distance(d)
+
+    # tests
+    assert from_a['A'][0] == 0
+    assert from_a['B'][0] == 11
+    assert from_a['C'][0] == 9
+    assert from_a['D'][0] == 20
+    assert from_a['E'][0] == 20
+    assert from_a['F'][0] == 7
+
+    assert from_d['A'][0] == 20
+    assert from_d['B'][0] == 9
+    assert from_d['C'][0] == 11
+    assert from_d['D'][0] == 0
+    assert from_d['E'][0] == 6
+    assert from_d['F'][0] == 21
+    print("All tests passed")

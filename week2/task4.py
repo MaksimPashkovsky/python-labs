@@ -2,9 +2,9 @@ def lev(s: str, t: str, *,
         insertion_cost: float = 0.5,
         deletion_cost: float = 0.5,
         replacement_cost: float = 1.0,
-        print_matrix = 0,
-        tab_size = 5,
-        print_detailed_result = 0):
+        print_matrix: int = 0,
+        tab_size: int = 5,
+        print_detailed_result: int = 0) -> float:
     """
     Returns Levenshtein distance from string s to string t
     To print transformation matrix change the value of print_matrix argument
@@ -62,6 +62,12 @@ def lev(s: str, t: str, *,
 
 
 if __name__ == '__main__':
-    word1 = "sitting"
-    word2 = "kitten"
-    print(lev(word1, word2, print_matrix=1, print_detailed_result=1, tab_size=4))
+    print(lev("kitten", "sitting", print_matrix=1, print_detailed_result=1, tab_size=4))
+    # tests
+    assert lev("sitting", "kitten") == 2.5
+    assert lev("kitten", "sitting") == 2.5
+    assert lev("kitten", "kitten") == 0
+    assert lev("relevant", "elephant", insertion_cost=1, deletion_cost=1, replacement_cost=1) == 3
+    assert lev("Lavenshtien", "Levenshtein") == 2.0
+    assert lev("plasma", "altruism", insertion_cost=1, deletion_cost=1, replacement_cost=1) == 6
+    print("All tests passed")

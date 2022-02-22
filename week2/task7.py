@@ -1,7 +1,7 @@
 import itertools
 
 
-def count_ways(S, n):
+def count_ways(S: list, n: int) -> int:
     num_of_ways = [0 for _ in range(n + 1)]
     num_of_ways[0] = 1
 
@@ -11,7 +11,7 @@ def count_ways(S, n):
     return num_of_ways[n]
 
 
-def all_combinations(l, amount, n):
+def all_combinations(l: list, amount: int, n: int):
     res = []
     k, i = 0, 0
     while True:

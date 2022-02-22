@@ -1,22 +1,18 @@
 import csv
+from dataclasses import dataclass, field
 
 
+@dataclass
 class Node:
-    def __init__(self, data, id = None, child_nodes = None):
-        self.data = data
-        self.id = id
-        self.child_nodes = list()
-
-    def __repr__(self):
-        if len(self.child_nodes):
-            return f"Node(data = {self.data}, id = {self.id}, child_nodes = {self.child_nodes})"
-        return f"Node(data = {self.data}, id = {self.id})"
+    data: ...
+    id: int = None
+    child_nodes: list = field(default_factory=list)
 
 
 nodes_dict = dict()
 
 
-def find_node_by_id(id: int):
+def find_node_by_id(id: int) -> Node:
     return nodes_dict[id] if id in nodes_dict else None
 
 
