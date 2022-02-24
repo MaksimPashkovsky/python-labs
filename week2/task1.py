@@ -1,10 +1,11 @@
 import csv
+from typing import Any
 from dataclasses import dataclass, field
 
 
 @dataclass
 class Node:
-    data: ...
+    data: Any
     id: int = None
     child_nodes: list = field(default_factory=list)
 
