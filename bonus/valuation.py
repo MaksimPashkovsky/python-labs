@@ -1,47 +1,49 @@
 import csv
 from collections import namedtuple
 
-datas, currencies, matchings = [], {}, []
 
-with open(r'D:\Python\pythonProject1\bonus\data.csv', newline="") as file:
-    reader = csv.reader(file)
-    Data = namedtuple('data', ",".join(next(reader)))
-    while True:
-        try:
-            datas.append(Data(*next(reader)))
-        except StopIteration:
-            break
-    # print(*datas, sep="\n")
-
-with open(r'D:\Python\pythonProject1\bonus\currencies.csv', newline="") as file:
-    reader = csv.reader(file)
-    next(reader)  # first line
-    while True:
-        try:
-            c = next(reader)
-            currencies[c[0]] = c[1]
-        except StopIteration:
-            break
-    print(currencies, sep="\n")
+def read_file(filename, name: str):
+    with open(r'bonus\\' + filename, newline="") as file:
+        reader = csv.reader(file)
+        this_tuple = namedtuple(name, ",".join(next(reader)))
+        return [this_tuple(*n) for n in reader]
 
 
-with open(r'D:\Python\pythonProject1\bonus\matchings.csv', newline="") as file:
-    reader = csv.reader(file)
-    Matching = namedtuple('matching', ",".join(next(reader)))
-    while True:
-        try:
-            matchings.append(Matching(*next(reader)))
-        except StopIteration:
-            break
-    # print(*matchings, sep="\n")
+if __name__ == '__main__':
+    datas = read_file('data.csv', 'data')
+    currencies = read_file('currencies.csv', 'currency')
+    matchings = read_file('matchings.csv', 'matching')
 
-for i in range(1, len(matchings) + 1):
-    ms = list(filter(lambda x: int(x.matching_id) == i, datas))
-    total_price = sum([int(m.price) * int(m.quantity) for m in ms])
+    with open(r'bonus\top_products.csv', 'w', newline='') as newfile:
+        writer = csv.writer(newfile)
+        writer.writerow(['matching_id', 'total_price', 'avg_price', 'currency', 'ignored_products_count'])
 
+        # matching_id's iteration
+        for cur_id in range(1, len(matchings) + 1):
+            # only products with current matching_id
+            products = list(filter(lambda x: int(x.matching_id) == cur_id, datas))
 
+            # sort products according to total price and currency
+            sorted_products = sorted(products, key=
+                    lambda x: int(x.price)
+                              * int(x.quantity)
+                              * float(
+                                    next(
+                                        filter(lambda y: y.currency == x.currency, currencies)).ratio)
+                                    )
 
+            # products limit for current matching_id
+            limit = int(
+                next(
+                    filter(lambda x: int(x.matching_id) == cur_id, matchings)
+                ).top_priced_count
+            )
 
-with open(r'D:\Python\pythonProject1\bonus\top_products.csv', 'w', newline='') as newfile:
-    writer = csv.writer(newfile)
-    writer.writerow(['matching_id', 'total_price', 'avg_price', 'currency', 'ignored_products_count'])
+            ignored = abs(limit - len(products))
+            while limit:
+                prod = sorted_products.pop()
+                total_price = int(prod.price) * int(prod.quantity)
+                avg_price = total_price / int(prod.quantity)
+                currency = prod.currency
+                writer.writerow([cur_id, total_price, round(avg_price), currency, ignored])
+                limit -= 1
