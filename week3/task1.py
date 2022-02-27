@@ -1,3 +1,4 @@
+import operator
 import yaml
 
 
@@ -11,27 +12,24 @@ class ResultTooSmallError(Exception):
         return "The %s(%d, %d) is %d, but must be bigger than %d" % self.args
 
 
+OPERATIONS = {
+    'sum': operator.add,
+    'div': operator.truediv,
+    'diff': operator.ne
+}
+
+
 def func(a: int, b: int, rules: dict):
-    exceptions = []
-    result = 0
     for operation, rule in rules.items():
         min_limit, max_limit = rule['min'], rule['max']
-        match operation:
-            case 'sum':
-                result = a + b
-            case 'div':
-                result = a / b
-            case 'diff':
-                result = abs(a - b)
+        result = OPERATIONS[operation](a, b)
         if min_limit <= result <= max_limit:
             continue
         try:
             raise ResultTooSmallError(operation, a, b, result, min_limit) if result < min_limit \
                 else ResultTooBigError(operation, a, b, result, max_limit)
         except Exception as e:
-            exceptions.append(e)
-    for e in exceptions:
-        print(e.__class__.__name__, e)
+            print(e.__class__.__name__, e)
 
 
 if __name__ == '__main__':
