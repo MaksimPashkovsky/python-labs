@@ -12,17 +12,10 @@ class ResultTooSmallError(Exception):
         return "The %s(%d, %d) is %d, but must be bigger than %d" % self.args
 
 
-OPERATIONS = {
-    'sum': operator.add,
-    'div': operator.truediv,
-    'diff': operator.ne
-}
-
-
 def func(a: int, b: int, rules: dict):
     for operation, rule in rules.items():
         min_limit, max_limit = rule['min'], rule['max']
-        result = OPERATIONS[operation](a, b)
+        result = getattr(operator, operation)(a, b)
         if min_limit <= result <= max_limit:
             continue
         try:
@@ -33,6 +26,6 @@ def func(a: int, b: int, rules: dict):
 
 
 if __name__ == '__main__':
-    with open(r"week3\rules.yaml") as file:
+    with open(r"week3\rules2.yaml") as file:
         template = yaml.safe_load(file)
     func(100, 99, template)
