@@ -4,15 +4,15 @@ from contextlib import contextmanager
 class Storage:
 
     def __init__(self, items):
-        self.items = items
+        self.__items = items
         self.is_appendable = False
 
     def show(self):
-        print(self.items)
+        print(self.__items)
 
     def append(self, item):
         if self.is_appendable:
-            self.items.append(item)
+            self.__items.append(item)
 
     def __lock(self):
         self.is_appendable = False
