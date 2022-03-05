@@ -1,0 +1,11 @@
+add:
+  max: 50
+  min: 5
+ 
+truediv:
+  max: 10
+  min: 2
+ 
+sub:
+  max: 20
+  min: 5
