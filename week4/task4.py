@@ -1,3 +1,8 @@
+"""
+Bank Account
+"""
+
+
 class BankAccount:
 
     def __init__(self, acc_num: int, name: str, balance: float):
@@ -10,8 +15,7 @@ class BankAccount:
 
     def withdraw(self, amount: float):
         if amount > self.__balance:
-            print("Not enough money on balance!")
-            return
+            raise ValueError("Not enough money on balance!")
         self.__balance = round(self.__balance - amount, 2)
 
     def apply_fees(self):

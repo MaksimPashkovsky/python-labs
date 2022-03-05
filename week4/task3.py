@@ -1,4 +1,7 @@
-import io
+"""
+FASTA-парсер
+"""
+
 from dataclasses import dataclass
 
 
@@ -13,7 +16,7 @@ class Sequence:
 class FastaParser:
 
     @staticmethod
-    def parse_by_parts(file: io.TextIOWrapper):
+    def parse_by_parts(file) -> Sequence:
         """
         Parse a .fasta file by parts.
         Useful for big input files.
@@ -34,7 +37,7 @@ class FastaParser:
         yield Sequence(iden, desc, string)
 
     @staticmethod
-    def parse_at_once(file: io.TextIOWrapper):
+    def parse_at_once(file) -> list[Sequence]:
         """
         Parse a .fasta file at once.
         Not recommended for big input files.
@@ -50,11 +53,9 @@ class FastaParser:
 if __name__ == '__main__':
     with open(r'week4\abcd.fasta') as fasta_file1:
         seqs = FastaParser.parse_at_once(fasta_file1)
-    for s in seqs:
-        print(s)
+    print(seqs[0])
 
     with open(r'week4\abcd.fasta') as fasta_file2:
         gen = FastaParser.parse_by_parts(fasta_file2)
-        for _ in range(10):
-            a = next(gen)
-            print(a)
+        a = next(gen)
+        print(a)
