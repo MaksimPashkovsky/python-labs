@@ -10,7 +10,7 @@ class Graph:
         self.adjacency_matrix = [[0] * len(nodes) for _ in range(len(nodes))]
         self.nodes = nodes
         for i in range(len(self.nodes)):
-            self.nodes[i].id = i
+            self.nodes[i].cur_id = i
 
     def connect_two(self, node1, node2, weight = 1):
         n1_index = self.get_index_from_node(node1)
@@ -25,7 +25,7 @@ class Graph:
         if isinstance(node, int):
             return node
         else:
-            return node.id
+            return node.cur_id
 
     def connections_from(self, node):
         node = self.get_index_from_node(node)
@@ -64,10 +64,10 @@ class Graph:
 
             for node, weight in connections:
                 tot_dist = weight + min_dist
-                if tot_dist < dist[node.id][0]:
-                    dist[node.id][0] = tot_dist
-                    dist[node.id][1] = list(dist[min_node][1])
-                    dist[node.id][1].append(node)
+                if tot_dist < dist[node.cur_id][0]:
+                    dist[node.cur_id][0] = tot_dist
+                    dist[node.cur_id][1] = list(dist[min_node][1])
+                    dist[node.cur_id][1].append(node)
         return dist
 
     def distance(self, node):
