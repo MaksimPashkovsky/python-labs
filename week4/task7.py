@@ -3,6 +3,7 @@ Numbers wrapper
 """
 
 import operator
+from typing import Type
 
 
 class NumbersWrapper:
@@ -13,32 +14,32 @@ class NumbersWrapper:
     def __len__(self):
         return len(self.numbers)
 
-    @staticmethod
-    def __do_operation(nums1: list[int], nums2: list[int], operator) -> 'NumbersWrapper':
+    @classmethod
+    def _build_operated(cls, nums1: list[int], nums2: list[int], operator) -> 'NumbersWrapper':
         len1, len2 = len(nums1), len(nums2)
         m = max(len1, len2)
         l1 = nums1 + [0] * (m - len1)
         l2 = nums2 + [0] * (m - len2)
         res = [operator(x, y) for x, y in zip(l1, l2)]
-        return NumbersWrapper(*res)
+        return cls(*res)
 
     def __add__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.add)
+        return self._build_operated(self.numbers, other.numbers, operator.add)
 
     def __sub__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.sub)
+        return self._build_operated(self.numbers, other.numbers, operator.sub)
 
     def __mul__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.mul)
+        return self._build_operated(self.numbers, other.numbers, operator.mul)
 
     def __truediv__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.truediv)
+        return self._build_operated(self.numbers, other.numbers, operator.truediv)
 
     def __floordiv__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.floordiv)
+        return self._build_operated(self.numbers, other.numbers, operator.floordiv)
 
     def __mod__(self, other):
-        return NumbersWrapper.__do_operation(self.numbers, other.numbers, operator.mod)
+        return self._build_operated(self.numbers, other.numbers, operator.mod)
 
     def __pow__(self, power, modulo=None):
         res = [n ** power for n in self.numbers]
@@ -113,7 +114,7 @@ if __name__ == '__main__':
     assert len(NumbersWrapper()) == 0
 
     assert (NumbersWrapper(1, 2, 3) > NumbersWrapper(3, 4, 5)) is False
-    assert (NumbersWrapper(1, 2, 3, 8) > NumbersWrapper(3, 4, 5)) is True
+    assert (NumbersWrapper(1, 2, 3, 8) > NumbersWrapper(3, 4, 5)) is False
     assert (NumbersWrapper() > NumbersWrapper(3, 4, 5)) is False
     assert (NumbersWrapper(1, 2, 3) > NumbersWrapper(1, 2, 3)) is False
     print("All tests passed")

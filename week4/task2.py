@@ -59,10 +59,20 @@ if __name__ == '__main__':
     d1 = Dish("Soup", 3.51, 250)
     d2 = Dish("Salad", 1.30, 160)
     d3 = Dish("Steak", 5.43, 310)
+
     order = Order(d1, d2)
+    assert order.total_cost == 4.81
+    assert order.dishes_quantity == 2
+    assert order.total_weight == 410
+
     order.add_dish(d3)
-    print(order)
+
+    assert order.total_cost == 10.24
+    assert order.dishes_quantity == 3
+    assert order.total_weight == 720
+
     order.pay(10)
     print(order)
     order.pay(2)
     print(order)
+    print("all tests passed")

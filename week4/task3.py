@@ -3,6 +3,7 @@ FASTA-парсер
 """
 
 from dataclasses import dataclass
+from typing import Iterator
 
 
 @dataclass
@@ -16,7 +17,7 @@ class Sequence:
 class FastaParser:
 
     @staticmethod
-    def parse_by_parts(file) -> Sequence:
+    def parse_by_parts(file) -> Iterator[Sequence]:
         """
         Parse a .fasta file by parts.
         Useful for big input files.
