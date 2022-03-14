@@ -1,10 +1,12 @@
 """
-YAML генерация
+FILES to YAML
 """
 
 import json
+import json.decoder
 import os
 import yaml
+import yaml.scanner
 from sys import argv
 
 
@@ -21,26 +23,34 @@ def walk_thru(startdir: str) -> list:
     return a
 
 
+def read_file_content(filepath: str):
+    with open(filepath) as yaml_file:
+        try:
+            template = yaml.safe_load(yaml_file)
+            return template
+        except (yaml.scanner.ScannerError, UnicodeDecodeError):
+            pass
+    with open(filepath) as json_file:
+        try:
+            template = json.load(json_file)
+            return template
+        except (json.decoder.JSONDecodeError, UnicodeDecodeError):
+            pass
+    with open(filepath, mode='r+b') as file:
+        content = file.read()
+    return content
+
+
 def dir_tree_dict(startdir: str) -> dict:
     d = {}
     for item in dirs_and_files:
         p = d
         for x in item.split('/'):
-            _, ext = os.path.splitext(item)
-            if ext == '.txt':
-                with open(startdir + item) as txt_file:
-                    content = txt_file.read()
-                p = p.setdefault(x, content)
-            elif ext == '.yaml':
-                with open(startdir + item) as yaml_file:
-                    template = yaml.safe_load(yaml_file)
-                p = p.setdefault(x, template)
-            elif ext == '.json':
-                with open(startdir + item) as json_file:
-                    template = json.load(json_file)
-                p = p.setdefault(x, template)
-            elif ext == '':
+            if os.path.isdir(startdir + item):
                 p = p.setdefault(x, {})
+            else:
+                content = read_file_content(startdir + item)
+                p = p.setdefault(x, content)
     return d
 
 
