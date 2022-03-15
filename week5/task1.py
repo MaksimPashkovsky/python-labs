@@ -15,8 +15,8 @@ def walk_thru(startdir: str) -> list:
     for root, dirs, files in os.walk(startdir):
         s = root.replace(startdir, '')
         if not s:
-            a.extend([file for file in files])
-            a.extend([dir for dir in dirs])
+            a.extend(files)
+            a.extend(dirs)
         else:
             a.extend([s + '/' + file for file in files])
             a.extend([s + '/' + dir for dir in dirs])
@@ -24,20 +24,21 @@ def walk_thru(startdir: str) -> list:
 
 
 def read_file_content(filepath: str):
-    with open(filepath) as yaml_file:
-        try:
-            template = yaml.safe_load(yaml_file)
-            return template
-        except (yaml.scanner.ScannerError, UnicodeDecodeError):
-            pass
-    with open(filepath) as json_file:
-        try:
-            template = json.load(json_file)
-            return template
-        except (json.decoder.JSONDecodeError, UnicodeDecodeError):
-            pass
-    with open(filepath, mode='r+b') as file:
+    with open(filepath) as file:
         content = file.read()
+
+    try:
+        template = yaml.safe_load(content)
+        return template
+    except yaml.scanner.ScannerError:
+        pass
+
+    try:
+        template = json.loads(content)
+        return template
+    except json.decoder.JSONDecodeError:
+        pass
+
     return content
 
 

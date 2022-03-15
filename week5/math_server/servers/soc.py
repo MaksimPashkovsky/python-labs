@@ -4,7 +4,6 @@
 
 import socketserver
 import os
-from dotenv import load_dotenv
 from ..calc import do_calculation
 
 
@@ -19,8 +18,9 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 
 
 if __name__ == '__main__':
-    load_dotenv()
-    HOST, PORT = os.getenv('SOCKET').split(':')
+    HOST = os.getenv('SOCKET_HOST', 'localhost')
+    PORT = os.getenv('SOCKET_PORT', '9090')
+
     with socketserver.TCPServer((HOST, int(PORT)), MyTCPHandler) as server:
         print(f"Server {server.server_address} listening...")
         server.serve_forever()
