@@ -1,0 +1,12 @@
+folder1:
+  1.txt: ''
+  2.txt: >
+   123
+   321
+   555
+  folder11:
+    xyz.txt: xyz
+folder2:
+  abc.txt: 765
+file54: 'sdkjfhksjdfh'
+folder3:
