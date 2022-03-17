@@ -2,24 +2,18 @@
 FILES to YAML
 """
 
+import argparse
 import json
 import json.decoder
 import os
+from pathlib import Path
 import yaml
 import yaml.scanner
-from sys import argv
 
 
 def walk_thru(startdir: str) -> list:
-    a = list()
-    for root, dirs, files in os.walk(startdir):
-        s = root.replace(startdir, '')
-        if not s:
-            a.extend(files)
-            a.extend(dirs)
-        else:
-            a.extend([s + '/' + file for file in files])
-            a.extend([s + '/' + dir for dir in dirs])
+    p = Path(startdir)
+    a = [str(el).replace('\\', '/').replace(startdir, '') for el in p.rglob('*')]
     return a
 
 
@@ -56,7 +50,10 @@ def dir_tree_dict(startdir: str) -> dict:
 
 
 if __name__ == '__main__':
-    startdir = argv[1] + '/'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('startdir', type=str)
+    args = parser.parse_args()
+    startdir = args.startdir + '/'
 
     dirs_and_files = walk_thru(startdir)
 
