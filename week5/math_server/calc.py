@@ -10,19 +10,18 @@ ALLOWED_OPERATIONS = {
     operator.pow,
     operator.mod,
     math.copysign,
+    math.log,
     math.hypot
 }
+
+FUNC_OPERATOR_BY_NAME = {op.__name__: op for op in ALLOWED_OPERATIONS}
 
 
 def do_calculation(data: str) -> str:
     try:
         operation, n1, n2 = data.split(' ')
-        if hasattr(operator, operation) and getattr(operator, operation) in ALLOWED_OPERATIONS:
-            result = getattr(operator, operation)(float(n1), float(n2))
-        elif hasattr(math, operation) and getattr(math, operation) in ALLOWED_OPERATIONS:
-            result = getattr(math, operation)(float(n1), float(n2))
-        else:
-            raise Exception
-    except Exception:
+        op_func = FUNC_OPERATOR_BY_NAME[operation]
+        result = op_func(float(n1), float(n2))
+    except (ValueError, KeyError, ZeroDivisionError, TypeError):
         result = ''
     return str(result)
