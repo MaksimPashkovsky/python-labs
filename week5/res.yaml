@@ -1,0 +1,19 @@
+testdir:
+  1.txt: a
+  2.txt: 123456789 sdfghjkl
+  abc:
+    888.txt: ''
+  file.json:
+    book:
+    - author: HerbertSchildt
+      edition: third
+      id: '01'
+      language: Java
+    - author: E.Balagurusamy
+      edition: second
+      id: '07'
+      language: C++
+  ppp.yaml:
+    kjh: iii
+    qwerty: 543
+  xyz: {}
