@@ -2,14 +2,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
 DATABASE = {
-    'drivername': 'postgresql',
-    'host': 'localhost',
-    'port': '5432',
-    'username': 'postgres',
-    'password': 'password',
-    'database': 'math-server-db'
+    'drivername': os.getenv('DB_DRIVER', default='postgresql'),
+    'host': os.getenv('DB_HOST', default='localhost'),
+    'port': os.getenv('DB_PORT', default='5432'),
+    'username': os.getenv('DB_USERNAME', default='postgres'),
+    'password': os.getenv('DB_PASSWORD', default='password'),
+    'database': os.getenv('DB_NAME', default='math-server-db')
 }
 
 engine = create_engine(URL(**DATABASE))

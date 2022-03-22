@@ -12,9 +12,10 @@ app = Flask(__name__)
 def calculate():
     data = request.form["string"]
     en, num1, num2, result = do_calculation(data)
-    note = Note(en, num1, num2, result)
-    session.add(note)
-    session.commit()
+    if isinstance(result, float):
+        note = Note(en, num1, num2, result)
+        session.add(note)
+        session.commit()
     return str(result)
 
 
