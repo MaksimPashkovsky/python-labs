@@ -1,9 +1,9 @@
 import socketserver
 import os
-from math_server.operators import Operator
-from math_server.calc import do_calculation
-from math_server.models import Note
-from math_server.db_setup import session
+from ..operators import Operator
+from ..calc import do_calculation
+from ..models import Note
+from ..db_setup import session
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
