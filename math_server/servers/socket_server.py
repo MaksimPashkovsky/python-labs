@@ -3,8 +3,7 @@ import os
 from math_server.operators import Operator
 from math_server.calc import do_calculation
 from math_server.models import Note
-from math_server.db_setup import init_db, session
-init_db()
+from math_server.db_setup import session
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
@@ -58,9 +57,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             return
 
         en, num1, num2, result = do_calculation(data)
-        note = Note(en, num1, num2, result)
-        session.add(note)
-        session.commit()
+        if isinstance(result, float):
+            note = Note(en, num1, num2, result)
+            session.add(note)
+            session.commit()
         self.request.sendall(str(result).encode('utf-8'))
 
 

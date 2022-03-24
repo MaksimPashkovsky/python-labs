@@ -2,8 +2,7 @@ from flask import Flask, request, jsonify
 from ..models import Note
 from ..calc import do_calculation
 from ..operators import ALLOWED_OPERATIONS, Operator
-from ..db_setup import init_db, session
-init_db()
+from ..db_setup import session
 
 app = Flask(__name__)
 
