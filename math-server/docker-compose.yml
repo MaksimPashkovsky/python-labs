@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    user: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=mathdb
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - 5555:5432
+
+  http-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: http-server
+    ports:
+      - 9000:9000
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5555
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=mathdb
+    command: bash -c "alembic upgrade head"
+
+  socket-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: socket-server
+    ports:
+      - 8000:8000
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=mathdb
+    command: bash -c "alembic upgrade head"
