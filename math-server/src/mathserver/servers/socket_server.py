@@ -66,7 +66,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 
 if __name__ == '__main__':
     HOST = os.getenv('SOCKET_HOST', 'localhost')
-    PORT = os.getenv('SOCKET_PORT', '9090')
+    PORT = os.getenv('SOCKET_PORT', '8000')
 
     with socketserver.TCPServer((HOST, int(PORT)), MyTCPHandler) as server:
         print(f"Server {server.server_address} listening...")
