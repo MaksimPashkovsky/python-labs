@@ -15,6 +15,15 @@ services:
     ports:
       - 5555:5432
 
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations
+    restart: on-failure
+    depends_on:
+      - db
+
   http-server:
     build:
       context: .
@@ -28,7 +37,8 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_NAME=mathdb
-    command: bash -c "sleep 20 && alembic upgrade head && cd .. && python -m math-server.servers.flask_server"
+    depends_on:
+      - migrations
 
   socket-server:
     build:
@@ -43,4 +53,5 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_NAME=mathdb
-    command: bash -c "sleep 25 && cd .. && python -m math-server.servers.socket_server"
+    depends_on:
+      - migrations

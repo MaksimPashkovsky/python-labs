@@ -20,11 +20,11 @@ def do_calculation(data: str) -> tuple[Operator, float, float, Union[float, str]
 
     op_str, n1_str, n2_str = splitted_data
 
-    if not op_str.isalpha() or op_str not in FUNC_OPERATOR_BY_NAME.keys():
+    if not op_str.isalpha() or op_str.lower() not in FUNC_OPERATOR_BY_NAME.keys():
         logging.error('Incorrect/not allowed operator!')
         return op_enum, num1, num2, ''
 
-    op_func = FUNC_OPERATOR_BY_NAME[op_str]
+    op_func = FUNC_OPERATOR_BY_NAME[op_str.lower()]
     op_enum = Operator[op_str.upper()]
 
     try:
