@@ -35,7 +35,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             offset = None
 
         if tokens[0] == 'all_operations':
-            if tokens[1].isalpha():
+            if len(tokens) != 1 and tokens[1].isalpha():
                 operation = tokens[1].upper()
                 if operation in Operator.__members__:
                     query = session.query(Note) \
@@ -65,7 +65,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 
 
 if __name__ == '__main__':
-    HOST = os.getenv('SOCKET_HOST', 'localhost')
+    HOST = os.getenv('SOCKET_HOST', '0.0.0.0')
     PORT = os.getenv('SOCKET_PORT', '8000')
 
     with socketserver.TCPServer((HOST, int(PORT)), MyTCPHandler) as server:

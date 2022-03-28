@@ -43,4 +43,4 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_NAME=mathdb
-    command: bash -c "sleep 20 && alembic upgrade head && cd .. && python -m math-server.servers.socket_server"
+    command: bash -c "sleep 25 && cd .. && python -m math-server.servers.socket_server"
