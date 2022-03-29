@@ -21,6 +21,12 @@ services:
       dockerfile: servers.dockerfile
       target: migrations
     restart: on-failure
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=mathdb
     depends_on:
       - db
 
@@ -32,6 +38,7 @@ services:
     ports:
       - 9000:9000
     environment:
+      - HTTP_PORT=9000
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USERNAME=postgres
@@ -48,6 +55,7 @@ services:
     ports:
       - 8000:8000
     environment:
+      - SOCKET_PORT=8000
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USERNAME=postgres
@@ -55,9 +63,3 @@ services:
       - DB_NAME=mathdb
     depends_on:
       - migrations
-
-  unit_tests:
-    build:
-      context: .
-      dockerfile: tests.dockerfile
-      target: unit-tests

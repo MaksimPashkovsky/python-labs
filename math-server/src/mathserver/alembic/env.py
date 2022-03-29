@@ -1,5 +1,5 @@
 from logging.config import fileConfig
-
+import os
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -8,6 +8,14 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+DB_DRIVER = os.getenv('DB_DRIVER', default='postgresql')
+DB_HOST = os.getenv('DB_HOST', default='localhost')
+DB_PORT = os.getenv('DB_PORT', default='5432')
+DB_USERNAME = os.getenv('DB_USERNAME', default='postgres')
+DB_PASSWORD = os.getenv('DB_PASSWORD', default='password')
+DB_NAME = os.getenv('DB_NAME', default='mathdb')
+config.set_main_option('sqlalchemy.url', f'{DB_DRIVER}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

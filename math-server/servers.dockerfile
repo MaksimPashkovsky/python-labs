@@ -18,8 +18,6 @@ COPY src/mathserver/servers/flask_server.py /usr/src/math-server/servers/
 COPY src/mathserver/calc.py /usr/src/math-server/
 COPY src/mathserver/db_setup.py /usr/src/math-server/
 
-ENV HTTP_PORT=9000
-
 WORKDIR /usr/src
 
 CMD ["python", "-m", "math-server.servers.flask_server"]
@@ -30,8 +28,6 @@ RUN mkdir -p /usr/src/math-server/servers
 COPY src/mathserver/servers/socket_server.py /usr/src/math-server/servers/
 COPY src/mathserver/calc.py /usr/src/math-server/
 COPY src/mathserver/db_setup.py /usr/src/math-server/
-
-ENV SOCKET_PORT=8000
 
 WORKDIR /usr/src
 
