@@ -63,6 +63,9 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             session.commit()
         self.request.sendall(str(result).encode('utf-8'))
 
+    def finish(self) -> None:
+        session.close()
+
 
 if __name__ == '__main__':
     HOST = os.getenv('SOCKET_HOST', '0.0.0.0')
