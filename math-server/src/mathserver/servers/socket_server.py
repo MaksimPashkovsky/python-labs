@@ -1,6 +1,6 @@
 import socketserver
 import os
-from ..operators import Operator
+from ..operators import Operator, ALLOWED_OPERATIONS
 from ..calc import do_calculation
 from ..models import Note
 from ..db_setup import session
@@ -9,18 +9,16 @@ from ..db_setup import session
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self) -> None:
-        """
-        Socket can receive strings:
-        1) {operation} {number1} {number2}
-        Sends the result of operation or '' in case of invalid input
-        2) all_operations [operation] [-limit] [-offset]
-        Sends the result of executed query
-        """
         self.data = self.request.recv(1024).strip()
         data = self.data.decode('utf-8')
         print(f"Received: {data}")
 
         tokens = data.split()
+
+        if tokens[0] == 'allowed_operations':
+            a = [n.__name__ for n in ALLOWED_OPERATIONS]
+            self.request.sendall(', '.join(a).encode('utf-8'))
+            return
 
         try:
             l_index = tokens.index('-limit')
