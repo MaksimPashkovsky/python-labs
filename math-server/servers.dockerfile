@@ -37,6 +37,5 @@ FROM base AS migrations
 
 RUN mkdir -p /usr/src/math-server/alembic
 COPY migrations/. /usr/src/math-server/
-# COPY migrations/alembic.ini /usr/src/math-server/
 
 CMD ["alembic", "upgrade", "head"]

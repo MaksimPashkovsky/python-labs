@@ -45,6 +45,13 @@ services:
       dockerfile: tests.dockerfile
       target: unit-tests
 
+  migrations-tests:
+    build:
+      context: .
+      dockerfile: tests.dockerfile
+      target: migrations-tests
+    restart: on-failure
+
   integration-tests-http:
     build:
       context: .
