@@ -32,3 +32,4 @@ def upgrade():
 
 def downgrade():
     op.drop_table('history')
+    sa.Enum(Operator).drop(op.get_bind(), checkfirst=False)

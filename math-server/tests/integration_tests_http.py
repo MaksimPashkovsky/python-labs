@@ -14,7 +14,6 @@ def test_calculate():
     assert response.status_code == 200
     assert response.text == '3.0'
 
-    # Valid operation
     response = requests.post(f'http://{HOST}:{PORT}/calculate', data={'string': 'SUB -10 -20'})
     assert response.status_code == 200
     assert response.text == '10.0'

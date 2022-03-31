@@ -36,7 +36,7 @@ CMD ["python", "-m", "math-server.servers.socket_server"]
 FROM base AS migrations
 
 RUN mkdir -p /usr/src/math-server/alembic
-COPY src/mathserver/alembic /usr/src/math-server/alembic
-COPY src/mathserver/alembic.ini /usr/src/math-server/
+COPY migrations/. /usr/src/math-server/
+# COPY migrations/alembic.ini /usr/src/math-server/
 
 CMD ["alembic", "upgrade", "head"]

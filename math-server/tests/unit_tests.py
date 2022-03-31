@@ -1,9 +1,34 @@
 import unittest
-from ..calc import do_calculation
-from ..operators import Operator
+from calc import do_calculation
+from operators import Operator
 
 
 class TestCalculations(unittest.TestCase):
+
+    def test_incorrect(self):
+        op, num1, num2, result = do_calculation('qwer 12 32')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('add qwe ewq')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('add 12')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('add')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('123 321 21')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('111 222')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('123')
+        self.assertEqual(result, '')
+
+        op, num1, num2, result = do_calculation('')
+        self.assertEqual(result, '')
 
     def test_add(self):
         op, num1, num2, result = do_calculation('add 2 5')

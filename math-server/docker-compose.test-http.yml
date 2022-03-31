@@ -5,10 +5,9 @@ services:
     image: postgres:latest
     user: postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_DB=mathdb
+    env_file:
+      - db.env
     ports:
       - 5555:5432
 
@@ -20,10 +19,8 @@ services:
     restart: on-failure
     environment:
       - DB_HOST=test-db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=password
-      - DB_NAME=mathdb
+    env_file:
+      - db.env
     depends_on:
       - test-db
 
@@ -37,10 +34,8 @@ services:
     environment:
       - HTTP_PORT=9000
       - DB_HOST=test-db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=password
-      - DB_NAME=mathdb
+    env_file:
+      - db.env
     depends_on:
       - migrations
 
