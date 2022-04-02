@@ -7,7 +7,7 @@ Create Date: 2022-03-21 15:44:31.257570
 """
 from alembic import op
 import sqlalchemy as sa
-from math_server.models import Operator
+from operators import Operator
 
 
 # revision identifiers, used by Alembic.
@@ -32,3 +32,4 @@ def upgrade():
 
 def downgrade():
     op.drop_table('history')
+    sa.Enum(Operator).drop(op.get_bind(), checkfirst=False)

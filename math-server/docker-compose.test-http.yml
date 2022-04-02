@@ -1,0 +1,65 @@
+version: "3"
+
+services:
+  test-db:
+    image: postgres:latest
+    user: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    env_file:
+      - db.env
+    ports:
+      - 5555:5432
+
+  migrations:
+    build:
+      context: .
+      dockerfile: servers.dockerfile
+      target: migrations
+    restart: on-failure
+    environment:
+      - DB_HOST=test-db
+    env_file:
+      - db.env
+    depends_on:
+      - test-db
+
+  http-server:
+    build:
+      context: .
+      dockerfile: servers.dockerfile
+      target: http-server
+    ports:
+      - 9000:9000
+    environment:
+      - HTTP_PORT=9000
+      - DB_HOST=test-db
+    env_file:
+      - db.env
+    depends_on:
+      - migrations
+
+  unit-tests:
+    build:
+      context: .
+      dockerfile: tests.dockerfile
+      target: unit-tests
+
+  migrations-tests:
+    build:
+      context: .
+      dockerfile: tests.dockerfile
+      target: migrations-tests
+    restart: on-failure
+
+  integration-tests-http:
+    build:
+      context: .
+      dockerfile: tests.dockerfile
+      target: integration-tests-http
+    environment:
+      - HTTP_HOST=http-server
+      - HTTP_PORT=9000
+    restart: on-failure
+    depends_on:
+      - migrations

@@ -1,6 +1,6 @@
 import socketserver
 import os
-from ..operators import Operator
+from ..operators import Operator, ALLOWED_OPERATIONS
 from ..calc import do_calculation
 from ..models import Note
 from ..db_setup import session
@@ -9,18 +9,16 @@ from ..db_setup import session
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self) -> None:
-        """
-        Socket can receive strings:
-        1) {operation} {number1} {number2}
-        Sends the result of operation or '' in case of invalid input
-        2) all_operations [operation] [-limit] [-offset]
-        Sends the result of executed query
-        """
         self.data = self.request.recv(1024).strip()
         data = self.data.decode('utf-8')
         print(f"Received: {data}")
 
         tokens = data.split()
+
+        if tokens[0] == 'allowed_operations':
+            a = [n.__name__ for n in ALLOWED_OPERATIONS]
+            self.request.sendall(', '.join(a).encode('utf-8'))
+            return
 
         try:
             l_index = tokens.index('-limit')
@@ -35,7 +33,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             offset = None
 
         if tokens[0] == 'all_operations':
-            if tokens[1].isalpha():
+            if len(tokens) != 1 and tokens[1].isalpha():
                 operation = tokens[1].upper()
                 if operation in Operator.__members__:
                     query = session.query(Note) \
@@ -63,10 +61,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             session.commit()
         self.request.sendall(str(result).encode('utf-8'))
 
+    def finish(self) -> None:
+        session.close()
+
 
 if __name__ == '__main__':
-    HOST = os.getenv('SOCKET_HOST', 'localhost')
-    PORT = os.getenv('SOCKET_PORT', '9090')
+    HOST = os.getenv('SOCKET_HOST', '0.0.0.0')
+    PORT = os.getenv('SOCKET_PORT', '8000')
 
     with socketserver.TCPServer((HOST, int(PORT)), MyTCPHandler) as server:
         print(f"Server {server.server_address} listening...")
