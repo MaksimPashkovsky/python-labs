@@ -1,11 +1,10 @@
 import socketserver
 import os
 from ..operators import Operator, ALLOWED_OPERATIONS
-from ..calc import do_calculation
 from ..models import Note
 from ..db_setup import session
-import multiprocessing
 import threading
+from ..multiproc import do_multiproc
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
@@ -56,11 +55,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             self.request.sendall(', '.join(a).encode('utf-8'))
             return
 
-        q = multiprocessing.Queue()
-        p = multiprocessing.Process(target=do_calculation, args=(data, q))
-        p.start()
-        p.join()
-        en, num1, num2, result = q.get()
+        en, num1, num2, result = do_multiproc(data)
         if isinstance(result, float) or isinstance(result, int):
             note = Note(en, num1, num2, result)
             session.add(note)

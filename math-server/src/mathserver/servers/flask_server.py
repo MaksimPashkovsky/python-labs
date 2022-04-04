@@ -1,10 +1,9 @@
 import os
 from flask import Flask, request, jsonify
 from ..models import Note
-from ..calc import do_calculation
 from ..operators import ALLOWED_OPERATIONS, Operator
 from ..db_setup import session
-import multiprocessing
+from ..multiproc import do_multiproc
 
 app = Flask(__name__)
 
@@ -12,12 +11,7 @@ app = Flask(__name__)
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.form["string"]
-    q = multiprocessing.Queue()
-    p = multiprocessing.Process(target=do_calculation, args=(data, q))
-    p.start()
-    p.join()
-    # en, num1, num2, result = do_calculation(data)
-    en, num1, num2, result = q.get()
+    en, num1, num2, result = do_multiproc(data)
     if isinstance(result, float) or isinstance(result, int):
         try:
             note = Note(en, num1, num2, result)
