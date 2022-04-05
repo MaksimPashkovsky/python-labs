@@ -1,5 +1,7 @@
 import random
 import multiprocessing
+from week2.task6 import monte_carlo_pi as monte_carlo_pi_usual
+from week3.task4 import ElapsedTimeMeasurer
 
 
 def monte_carlo_pi(queue: multiprocessing.Queue):
@@ -18,9 +20,14 @@ def monte_carlo_pi_multiproc(num_of_points: int, num_of_processes: int):
     for _ in range(num_of_processes):
         q.put(num_of_points // num_of_processes)
 
+    procs = []
+
     for _ in range(num_of_processes):
         p = multiprocessing.Process(target=monte_carlo_pi, args=(q,))
         p.start()
+        procs.append(p)
+
+    for p in procs:
         p.join()
 
     total_point_inside = sum(q.get() for _ in range(num_of_processes))
@@ -28,4 +35,9 @@ def monte_carlo_pi_multiproc(num_of_points: int, num_of_processes: int):
 
 
 if __name__ == '__main__':
-    print(monte_carlo_pi_multiproc(10_000_000, 5))
+    points_number = 25_000_000
+    with ElapsedTimeMeasurer() as etm1:
+        print(monte_carlo_pi_usual(points_number))
+    with ElapsedTimeMeasurer() as etm2:
+        print(monte_carlo_pi_multiproc(points_number, 3))
+    print(etm1.total_time, etm2.total_time)
