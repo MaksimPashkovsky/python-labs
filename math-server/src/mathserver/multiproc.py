@@ -1,11 +1,9 @@
-import multiprocessing
 from .calc import do_calculation
+from concurrent.futures import ProcessPoolExecutor
+
+executor = ProcessPoolExecutor(4)
 
 
 def do_multiproc(data):
-    q = multiprocessing.Queue()
-    p = multiprocessing.Process(target=do_calculation, args=(data, q))
-    p.start()
-    p.join()
-    en, num1, num2, result = q.get()
-    return en, num1, num2, result
+    fut = executor.submit(do_calculation, data)
+    return fut.result()
