@@ -1,10 +1,9 @@
-import time
 from typing import Callable
 from heapq import heappush, heappop
-from timer import ElapsedTimeMeasurer
 
 
 def sort_with_time_measurement(data: list, sorting_function: Callable) -> dict:
+    from timer import ElapsedTimeMeasurer
     with ElapsedTimeMeasurer() as etm:
         sorted_data = sorting_function(data)
     return {'time': etm.total_time, 'sorted_list': sorted_data}

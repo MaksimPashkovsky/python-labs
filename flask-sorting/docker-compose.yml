@@ -15,3 +15,9 @@ services:
       - 9999:9999
     depends_on:
       - db
+
+  unit-tests:
+    build:
+      context: .
+      dockerfile: tests.dockerfile
+      target: unit-tests
