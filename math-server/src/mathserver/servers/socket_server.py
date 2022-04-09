@@ -1,9 +1,10 @@
 import socketserver
 import os
 from ..operators import Operator, ALLOWED_OPERATIONS
-from ..calc import do_calculation
 from ..models import Note
 from ..db_setup import session
+import threading
+from ..multiproc import do_multiproc
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
@@ -54,8 +55,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             self.request.sendall(', '.join(a).encode('utf-8'))
             return
 
-        en, num1, num2, result = do_calculation(data)
-        if isinstance(result, float):
+        en, num1, num2, result = do_multiproc(data)
+        if isinstance(result, float) or isinstance(result, int):
             note = Note(en, num1, num2, result)
             session.add(note)
             session.commit()
@@ -65,10 +66,17 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         session.close()
 
 
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    pass
+
+
 if __name__ == '__main__':
     HOST = os.getenv('SOCKET_HOST', '0.0.0.0')
     PORT = os.getenv('SOCKET_PORT', '8000')
 
-    with socketserver.TCPServer((HOST, int(PORT)), MyTCPHandler) as server:
-        print(f"Server {server.server_address} listening...")
-        server.serve_forever()
+    with ThreadedTCPServer((HOST, int(PORT)), MyTCPHandler) as server:
+        server_thread = threading.Thread(target=server.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
+        server_thread.join()
+        server.shutdown()

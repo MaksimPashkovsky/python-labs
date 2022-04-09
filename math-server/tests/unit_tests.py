@@ -1,6 +1,6 @@
 import unittest
-from calc import do_calculation
-from operators import Operator
+from ..calc import do_calculation
+from ..operators import Operator
 
 
 class TestCalculations(unittest.TestCase):

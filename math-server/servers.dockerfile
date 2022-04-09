@@ -6,6 +6,7 @@ RUN mkdir -p /usr/src/math-server
 COPY requirements.txt /usr/src/math-server
 COPY src/mathserver/operators.py /usr/src/math-server/
 COPY src/mathserver/models.py /usr/src/math-server/
+COPY src/mathserver/multiproc.py /usr/src/math-server/
 
 WORKDIR /usr/src/math-server
 

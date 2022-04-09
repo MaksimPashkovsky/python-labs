@@ -34,6 +34,14 @@ def do_calculation(data: str) -> tuple[Operator, float, float, Union[float, str]
         logging.error('ValueError occurred!')
     except ZeroDivisionError:
         logging.error('ZeroDivisionError occurred!')
+    except OverflowError:
+        logging.error('Overflow occurred!')
+        try:
+            num1, num2 = int(n1_str), int(n2_str)
+            result = op_func(num1, num2)
+            return op_enum, num1, num2, result
+        except ValueError:
+            return op_enum, num1, num2, 'Overflow'
     else:
         return op_enum, num1, num2, result
 

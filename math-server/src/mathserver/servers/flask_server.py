@@ -1,9 +1,9 @@
 import os
 from flask import Flask, request, jsonify
 from ..models import Note
-from ..calc import do_calculation
 from ..operators import ALLOWED_OPERATIONS, Operator
 from ..db_setup import session
+from ..multiproc import do_multiproc
 
 app = Flask(__name__)
 
@@ -11,8 +11,8 @@ app = Flask(__name__)
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.form["string"]
-    en, num1, num2, result = do_calculation(data)
-    if isinstance(result, float):
+    en, num1, num2, result = do_multiproc(data)
+    if isinstance(result, float) or isinstance(result, int):
         try:
             note = Note(en, num1, num2, result)
             session.add(note)
@@ -52,5 +52,4 @@ def allowed_operations():
 
 if __name__ == '__main__':
     app.run(host=os.getenv('HTTP_HOST', default='0.0.0.0'),
-            port=os.getenv('HTTP_PORT', default=9000)
-            )
+            port=os.getenv('HTTP_PORT', default=9000), debug=True)
