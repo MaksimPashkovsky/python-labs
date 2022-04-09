@@ -46,12 +46,3 @@ def heap_sort(data: list) -> list:
     for value in data:
         heappush(h, value)
     return [heappop(h) for _ in range(len(h))]
-
-
-def measure_time(function):
-    def wrapper(data):
-        start = time.time()
-        function(data)
-        end = time.time()
-        print(f"Time for sorting {len(data)} elements with {function.__name__}:", end - start)
-    return wrapper

@@ -31,3 +31,6 @@ class MongodbService:
 
     def get_by_hash(self, h: str):
         return self._collection.find_one({'hash': h})
+
+    def get_all(self):
+        return list(self._collection.find())
