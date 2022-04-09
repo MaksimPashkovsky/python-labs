@@ -7,15 +7,15 @@ from typing import Callable
 def sorting_function_test(sorting_function: Callable):
     data = [1, 3, 6, 8, 1, 2, 0, 0, 0]
     output = sorting_function(data)
-    assert output == [0, 0, 0, 1, 1, 2, 3, 6, 8]
+    assert output == sorted(data)
 
     data = [3, 36, -9, 26, 85, -26, 78, -82, 8, 60]
     output = sorting_function(data)
-    assert output == [-82, -26, -9, 3, 8, 26, 36, 60, 78, 85]
+    assert output == sorted(data)
 
     data = [3.0, 36.23, -9.102, 26.002, 85.3, -26.4, 78.909, -82, 8.1, 60.22]
     output = sorting_function(data)
-    assert output == [-82, -26.4, -9.102, 3.0, 8.1, 26.002, 36.23, 60.22, 78.909, 85.3]
+    assert output == sorted(data)
 
     data = []
     output = sorting_function(data)

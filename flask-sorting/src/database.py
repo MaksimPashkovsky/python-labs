@@ -34,3 +34,6 @@ class MongodbService:
 
     def get_all(self):
         return list(self._collection.find())
+
+    def clear_all(self):
+        self._collection.delete_many({})

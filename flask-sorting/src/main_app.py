@@ -11,12 +11,6 @@ app = Flask(__name__)
 storage = MongodbService.get_instance()
 
 
-@app.route('/get_all_lists', methods=['GET'])
-def get_all():
-    res = storage.get_all()
-    return orjson.dumps(res, default=str)
-
-
 @app.route('/shaker-sort', methods=['POST'])
 def shaker():
     return handle_sort(shaker_sort)
@@ -37,6 +31,18 @@ def insertion():
     return handle_sort(insertion_sort)
 
 
+@app.route('/get_all_lists', methods=['GET'])
+def get_all():
+    res = storage.get_all()
+    return orjson.dumps(res, default=str)
+
+
+@app.route('/clear_all', methods=['GET'])
+def clear():
+    storage.clear_all()
+    return "cleared"
+
+
 def handle_sort(sorting_function: Callable):
     data = request.get_json()
     h = hash_list(data)
@@ -51,7 +57,3 @@ def handle_sort(sorting_function: Callable):
         'sorted_list': result['sorted_list']
     })
     return orjson.dumps(result)
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9999, debug=True)
