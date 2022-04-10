@@ -1,8 +1,8 @@
 import requests
-import os
+from config import Config
 
-HOST = os.getenv('SERVER_HOST', default='localhost')
-PORT = os.getenv('SERVER_PORT', default=9999)
+HOST = Config.SERVER_HOST
+PORT = Config.SERVER_PORT
 
 
 def test_shaker_sort():

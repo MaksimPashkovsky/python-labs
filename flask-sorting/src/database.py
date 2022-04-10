@@ -1,5 +1,5 @@
-import os
 from pymongo import MongoClient
+from config import Config
 
 
 class MongodbService:
@@ -16,15 +16,14 @@ class MongodbService:
         return cls._instance
 
     def __init__(self):
-        self._client = MongoClient(host=os.getenv('DB_HOST', default='localhost'),
-                                   port=os.getenv('DB_PORT', default=27017))
-        self._db = self._client[os.getenv('DB_NAME', default='sortdb')]
-        self._collection = self._db[os.getenv('DB_COLLECTION', default='sorted_lists')]
+        self._client = MongoClient(host=Config.DB_HOST, port=Config.DB_PORT)
+        self._db = self._client[Config.DB_NAME]
+        self._collection = self._db[Config.DB_COLLECTION]
 
     def save_data(self, data):
         self._collection.insert_one(data)
 
-    def has_hash(self, h: str):
+    def has_hash(self, h: str) -> bool:
         for _ in self._collection.find(filter={'hash': h}):
             return True
         return False

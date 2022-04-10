@@ -1,10 +1,12 @@
 import orjson
+import os
 from hashing import hash_list
 from flask import Flask, request
 from typing import Callable
 from sorting import shaker_sort, selection_sort, insertion_sort, heap_sort
 from multiproc import sort_multiproc
 from database import MongodbService
+from config import Config
 
 app = Flask(__name__)
 
@@ -57,3 +59,10 @@ def handle_sort(sorting_function: Callable):
         'sorted_list': result['sorted_list']
     })
     return orjson.dumps(result)
+
+
+if __name__ == '__main__':
+    HOST = Config.SERVER_HOST
+    PORT = Config.SERVER_PORT
+    WORKER_PROCESSES = Config.WORKER_PROCESSES
+    os.system(f"gunicorn -w {WORKER_PROCESSES} -b {HOST}:{PORT} main_app:app")

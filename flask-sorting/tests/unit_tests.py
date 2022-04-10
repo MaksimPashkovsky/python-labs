@@ -4,29 +4,10 @@ from hashing import hash_list
 from typing import Callable
 
 
-def sorting_function_test(sorting_function: Callable):
-    data = [1, 3, 6, 8, 1, 2, 0, 0, 0]
-    output = sorting_function(data)
-    assert output == sorted(data)
-
-    data = [3, 36, -9, 26, 85, -26, 78, -82, 8, 60]
-    output = sorting_function(data)
-    assert output == sorted(data)
-
-    data = [3.0, 36.23, -9.102, 26.002, 85.3, -26.4, 78.909, -82, 8.1, 60.22]
-    output = sorting_function(data)
-    assert output == sorted(data)
-
-    data = []
-    output = sorting_function(data)
-    assert output == []
-
-
 class TestSortingFunctions(unittest.TestCase):
 
     def test_shaker_sort(self):
         sorting_function_test(shaker_sort)
-
     def test_insertion_sort(self):
         sorting_function_test(insertion_sort)
 
@@ -48,6 +29,24 @@ class TestSortingFunctions(unittest.TestCase):
 
         data = []
         assert shaker_sort(data) == insertion_sort(data) == selection_sort(data) == heap_sort(data)
+
+
+def sorting_function_test(sorting_function: Callable):
+    data = [1, 3, 6, 8, 1, 2, 0, 0, 0]
+    output = sorting_function(data)
+    assert output == sorted(data)
+
+    data = [3, 36, -9, 26, 85, -26, 78, -82, 8, 60]
+    output = sorting_function(data)
+    assert output == sorted(data)
+
+    data = [3.0, 36.23, -9.102, 26.002, 85.3, -26.4, 78.909, -82, 8.1, 60.22]
+    output = sorting_function(data)
+    assert output == sorted(data)
+
+    data = []
+    output = sorting_function(data)
+    assert output == []
 
 
 class TestHashFunction(unittest.TestCase):

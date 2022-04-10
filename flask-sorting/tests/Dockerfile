@@ -15,6 +15,7 @@ CMD ["python", "unit_tests.py"]
 FROM base AS integration-tests
 
 COPY tests/integration_tests.py /usr/src/flask-sorting/
+COPY src/config.py /usr/src/flask-sorting/
 COPY tests/tests-requirements.txt /usr/src/flask-sorting/
 
 RUN pip install --no-cache-dir -r tests-requirements.txt
