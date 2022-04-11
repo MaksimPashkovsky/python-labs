@@ -43,9 +43,3 @@ def single_data_test(data: list, sorting_endpoint: str):
     response_json = response.json()
     assert response_json['time'] > 0
     assert response_json['sorted_list'] == sorted(data)
-
-    response = requests.post(f'http://{HOST}:{PORT}/{sorting_endpoint}', json=data)
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json['time'] == 0
-    assert response_json['sorted_list'] == sorted(data)

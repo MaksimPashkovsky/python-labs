@@ -3,14 +3,14 @@ import os
 from hashing import hash_list
 from flask import Flask, request
 from typing import Callable
-from sorting import shaker_sort, selection_sort, insertion_sort, heap_sort
-from multiproc import sort_multiproc
+from sorting import *
+from multiproc import sort_multiproc, thread_pool
 from database import MongodbService
 from config import Config
 
 app = Flask(__name__)
 
-storage = MongodbService.get_instance()
+storage = MongodbService()
 
 
 @app.route('/shaker-sort', methods=['POST'])
@@ -49,15 +49,17 @@ def handle_sort(sorting_function: Callable):
     data = request.get_json()
     h = hash_list(data)
 
-    if storage.has_hash(h):
-        sorted_list = storage.get_by_hash(h)['sorted_list']
+    found_item = storage.get_by_hash(h)
+    if found_item is not None:
+        sorted_list = found_item['sorted_list']
         return orjson.dumps({'time': 0, 'sorted_list': sorted_list})
 
     result = sort_multiproc(data, sorting_function)
-    storage.save_data({
-        'hash': h,
-        'sorted_list': result['sorted_list']
-    })
+    if len(data) >= Config.MIN_LEN_TO_CACHE:
+        thread_pool.submit(storage.save_data, {
+            'hash': h,
+            'sorted_list': result['sorted_list']
+        })
     return orjson.dumps(result)
 
 

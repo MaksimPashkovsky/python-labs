@@ -9,3 +9,4 @@ class Config:
     DB_PORT = int(os.getenv('DB_PORT', default=27017))
     DB_NAME = os.getenv('DB_NAME', default='sortdb')
     DB_COLLECTION = os.getenv('DB_COLLECTION', default='sorted_lists')
+    MIN_LEN_TO_CACHE = 8_000_000
