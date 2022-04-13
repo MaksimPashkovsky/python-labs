@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  db:
+    image: mongo:latest
+    restart: always
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=9999
+      - WORKER_PROCESSES=4
+      - DB_HOST=db
+      - DB_PORT=27017
+      - DB_NAME=sortdb
+      - DB_COLLECTION=sorted_lists
+    ports:
+      - 9999:9999
+    depends_on:
+      - db
+
+  unit-tests:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+      target: unit-tests
+
+  integration-tests:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+      target: integration-tests
+    environment:
+      - SERVER_HOST=server
+      - SERVER_PORT=9999
+    depends_on:
+      - db
+      - server
+    restart: on-failure
