@@ -1,5 +1,4 @@
 import orjson
-import os
 from hashing import hash_list
 from flask import Flask, request
 from typing import Callable
@@ -49,10 +48,11 @@ def handle_sort(sorting_function: Callable):
     data = request.get_json()
     h = hash_list(data)
 
-    found_item = storage.get_by_hash(h)
-    if found_item is not None:
-        sorted_list = found_item['sorted_list']
-        return orjson.dumps({'time': 0, 'sorted_list': sorted_list})
+    if len(data) >= Config.MIN_LEN_TO_CACHE:
+        found_item = storage.get_by_hash(h)
+        if found_item is not None:
+            sorted_list = found_item['sorted_list']
+            return orjson.dumps({'time': 0, 'sorted_list': sorted_list})
 
     result = sort_multiproc(data, sorting_function)
     if len(data) >= Config.MIN_LEN_TO_CACHE:
@@ -61,10 +61,3 @@ def handle_sort(sorting_function: Callable):
             'sorted_list': result['sorted_list']
         })
     return orjson.dumps(result)
-
-
-if __name__ == '__main__':
-    HOST = Config.SERVER_HOST
-    PORT = Config.SERVER_PORT
-    WORKER_PROCESSES = Config.WORKER_PROCESSES
-    os.system(f"gunicorn -w {WORKER_PROCESSES} -b {HOST}:{PORT} main_app:app")
